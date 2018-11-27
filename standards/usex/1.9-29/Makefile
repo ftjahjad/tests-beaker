@@ -230,7 +230,7 @@ $(METADATA): Makefile
 	@echo "Type:		Regression"	>> $(METADATA)
 	@echo "Type:		KernelTier1"	>> $(METADATA)
 	@echo "RunFor:		kernel"		>> $(METADATA)
-	@echo "Requires:	xorg-x11-devel"	>> $(METADATA)
+#	@echo "Requires:	xorg-x11-devel"	>> $(METADATA)
 	@echo "Requires:	glibc-kernheaders" >> $(METADATA)
 	@echo "Requires:	ncurses-devel"	>> $(METADATA)
 	@echo "License:		Red Hat Internal" >> $(METADATA)

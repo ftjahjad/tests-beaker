@@ -46,6 +46,12 @@ function VerboseCupsLog()
 
 
 # ---------- Start Test -------------
+# verify to not run on s390x
+if [ "$(uname -i)" = "s390x" ]; then
+    rhts-report-result $TEST SKIP $OUTPUTFILE
+    exit 0
+fi
+
 RHELVER=""
 cat /etc/redhat-release | grep "^Fedora"
 if [ $? -ne 0 ]; then
