@@ -132,5 +132,10 @@ default_pmtu_cleanup()
 	unset veth0_route0_ip[6]
 	unset veth0_route0_r_ip[6]
 
-	netns_clean.sh
-}
+	#netns_clean.sh
+	#clean netns env
+	for net in $(ip netns list | awk '{print $1}'); do
+		ip netns del $net
+	done
+	modprobe -r veth
+	modprobe -r bridge
