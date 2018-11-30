@@ -83,7 +83,7 @@ netperf_install()
 
         local OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
         #SRC_NETPERF=${SRC_NETPERF:-"http://netqe-bj.usersys.redhat.com/share/tools/netperf-20160222.tar.bz2"}
-        SRC_NETPERF=${SRC_NETPERF:-"http://people.redha2t.com/ctrautma/netperf-20160222.tar.bz2"}
+        SRC_NETPERF=${SRC_NETPERF:-"http://people.redhat.com/ctrautma/netperf-20160222.tar.bz2"}
         pushd ${NETWORK_COMMONLIB_DIR} 1>/dev/null
         wget -nv -N $SRC_NETPERF
         tar xjvf $(basename $SRC_NETPERF)

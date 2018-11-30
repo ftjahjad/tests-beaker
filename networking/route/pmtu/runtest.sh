@@ -46,19 +46,26 @@ TEST_ITEMS=${TEST_ITEMS:-$TEST_ITEMS_ALL}
 rlJournalStart
 
 rlPhaseStartSetup
-	rlRun "iproute_upstream_install"
-        # Add task param, needed for kernel-ci/CKI, e.g. <params><param name="CI" value="yes"/><params>
-        if [ $? -ne 0 ] && [ "$CI" = "yes" ]; then
-            report_result $TEST WARN
-            rhts-abort -t recipe
-        fi
-	rlRun "netperf_install"
-	rlLog "items include:$TEST_ITEMS"
+    rlRun "iproute_upstream_install"
+    # Add task param, needed for kernel-ci/CKI, e.g. <params><param name="CI" value="yes"/><params>
+    if [ $? -ne 0 ] && [ "$CI" = "yes" ]; then
+        report_result $TEST WARN
+        rhts-abort -t recipe
+    fi
+
+    rlRun "netperf_install"
+    # Add task param, needed for kernel-ci/CKI, e.g. <params><param name="CI" value="yes"/><params>
+    if [ $? -ne 0 ] && [ "$CI" = "yes" ]; then
+        report_result $TEST WARN
+        rhts-abort -t recipe
+    fi
+
+    rlLog "items include:$TEST_ITEMS"
 rlPhaseEnd
 
 for DO_SEC in $SEC_TYPE
 do
-	pmtu_test
+    pmtu_test
 done
 
 rlJournalEnd
