@@ -139,3 +139,4 @@ default_pmtu_cleanup()
 	done
 	modprobe -r veth
 	modprobe -r bridge
+}
