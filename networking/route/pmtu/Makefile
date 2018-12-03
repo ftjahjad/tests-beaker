@@ -63,6 +63,22 @@ $(METADATA): Makefile
 # add any other packages for which your test ought to run here
 	@echo "Requires:     $(PACKAGE_NAME)" >> $(METADATA)
 	@echo "Requires:     net-tools" >> $(METADATA)
+        @echo "Requires:     net-tools" >> $(METADATA)
+        @echo "Requires:     tcpdump" >> $(METADATA)
+        @echo "Requires:     nmap" >> $(METADATA)
+        @echo "Requires:     ethtool" >> $(METADATA)
+        @echo "Requires:     iproute" >> $(METADATA)
+        @echo "Requires:     nc nmap-ncat socat" >> $(METADATA) # for nc
+        @echo "Requires:     libtool" >> $(METADATA)    # for lksctp-tools
+        @echo "Requires:     bind-utils" >> $(METADATA) # for dig
+        @echo "Requires:     bridge-utils" >> $(METADATA)       # for brctl
+        @echo "Requires:     libteam" >> $(METADATA)
+        @echo "Requires:     teamd" >> $(METADATA)
+        @echo "Requires:     traceroute" >> $(METADATA)
+        @echo "Requires:     expect pexpect python3-pexpect" >> $(METADATA)
+        @echo "Requires:     bc wget bzip2 gcc" >> $(METADATA)
+        @echo "Requires:     git patch rsync" >> $(METADATA)
+        @echo "RhtsRequires: beakerlib-redhat" >> $(METADATA)
 	@echo "RhtsRequires:    kernel-kernel-networking-common" >> $(METADATA)
 	@echo "RhtsRequires:    library(kernel/network)" >> $(METADATA)
 # add any other requirements for the script to run here
