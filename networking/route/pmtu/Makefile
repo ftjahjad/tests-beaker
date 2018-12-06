@@ -79,8 +79,8 @@ $(METADATA): Makefile
 	@echo "Requires:     bc wget bzip2 gcc" >> $(METADATA)
 	@echo "Requires:     git patch rsync" >> $(METADATA)
 	@echo "RhtsRequires: beakerlib-redhat" >> $(METADATA)
-	@echo "RhtsRequires:    kernel-kernel-networking-common" >> $(METADATA)
-	@echo "RhtsRequires:    library(kernel/network)" >> $(METADATA)
+	@echo "RhtsRequires: kernel-kernel-networking-common" >> $(METADATA)
+	@echo "RhtsRequires: library(kernel/network)" >> $(METADATA)
 # add any other requirements for the script to run here
 
 # You may need other fields here; see the documentation

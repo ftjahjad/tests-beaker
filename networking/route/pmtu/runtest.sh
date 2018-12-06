@@ -39,7 +39,7 @@
 TEST_TYPE=${TEST_TYPE:-"netns"}
 TEST_TOPO=${TEST_TOPO:-"default"}
 SEC_TYPE=${SEC_TYPE:-"nosec ipsec"}
-
+TESTMASK="yes"
 
 . ./include.sh || exit 1
 
