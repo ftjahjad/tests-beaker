@@ -44,7 +44,11 @@ ctp-tools_install()
     git clone https://github.com/sctp/lksctp-tools
     pushd lksctp-tools
     patch -p1 < ../patch/lksctp.patch
+    [ "$(GetDistroRelease)" -eq 5 ] && mkdir m4
     ./bootstrap && ./configure && make && make install
+    # An interim workaround, will remove this after upstream fix 
+    # https://github.com/sctp/lksctp-tools/issues/24
+    [ -f src/include/linux/sctp.h ] && git checkout 3c8bd0d26b64611c690f33f5802c734b0642c1d8
     if [ $? -ne 0 ]; then
          # upstream lksctp-tools begin to make use kernel UAPI header,
          # which may cause compilation error on previous kernels.
@@ -82,10 +86,9 @@ netperf_install()
         lksctp_install
 
         local OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
-        #SRC_NETPERF=${SRC_NETPERF:-"http://netqe-bj.usersys.redhat.com/share/tools/netperf-20160222.tar.bz2"}
         SRC_NETPERF=${SRC_NETPERF:-"http://people.redhat.com/ctrautma/netperf-20160222.tar.bz2"}
         pushd ${NETWORK_COMMONLIB_DIR} 1>/dev/null
-        wget -nv -N $SRC_NETPERF
+        #wget -nv -N $SRC_NETPERF
         tar xjvf $(basename $SRC_NETPERF)
         cd netperf-20160222
         check_arch
