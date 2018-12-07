@@ -218,7 +218,7 @@ rlPhaseStartTest "pmtu_traffic_$DO_SEC"
 	sleep 5
 	rlRun "$ROUTE1NS ip link set veth0_server_r mtu 1300"
 	wait $ipv4_pid
-	[ $? -ne 0 ] && rlFail "netperf sctp_stream ipv4"
+#	[ $? -ne 0 ] && rlFail "netperf sctp_stream ipv4"
 	wait $ipv6_pid
 #	[ $? -ne 0 ] && rlFail "netperf sctp_stream ipv6"
 	rlRun "$CLIENTNS ip route flush cache"
@@ -270,7 +270,7 @@ rlPhaseStartTest "ip_no_pmtu_disc_test_$DO_SEC"
 		rlRun "$CLIENTNS ip route flush cache"
 		rlRun -l "$CLIENTNS ip route get ${veth0_server_ip[4]}"
 		rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t TCP_STREAM -l 1 -- -m 16k"
-#		rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t SCTP_STREAM -l 1 -- -m 16k"
+		rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t SCTP_STREAM -l 1 -- -m 16k"
 		rlRun "$CLIENTNS ip route get ${veth0_server_ip[4]} | grep \"mtu.*$default_min_pmtu\""
 		[ $? -ne 0 ] && rlRun -l "$CLIENTNS ip route get ${veth0_server_ip[4]}"
 		rlRun "$CLIENTNS ip route flush cache"
@@ -284,7 +284,7 @@ rlPhaseStartTest "ip_no_pmtu_disc_test_$DO_SEC"
 	rlRun "$CLIENTNS ip route flush cache"
 	rlRun -l "$CLIENTNS ip route get ${veth0_server_ip[4]}"
 	rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t TCP_STREAM -l 1 -- -m 16k"
-#	rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t SCTP_STREAM -l 1 -- -m 16k"
+	rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t SCTP_STREAM -l 1 -- -m 16k"
 	rlRun "$CLIENTNS ip route get ${veth0_server_ip[4]} | grep \"mtu.*$default_min_pmtu\""
 	[ $? -ne 0 ] && rlRun -l "$CLIENTNS ip route get ${veth0_server_ip[4]}"
 	rlRun "$CLIENTNS ip route flush cache"
@@ -297,7 +297,7 @@ rlPhaseStartTest "ip_no_pmtu_disc_test_$DO_SEC"
 		[ $? -ne 0 ] && rlRun -l "$CLIENTNS ip route get ${veth0_server_ip[4]}"
 		rlRun "$CLIENTNS ip route flush cache"
 		rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t TCP_STREAM -l 1 -- -m 16k"
-#		rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t SCTP_STREAM -l 1 -- -m 16k"
+		rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t SCTP_STREAM -l 1 -- -m 16k"
 		rlRun "$CLIENTNS ip route get ${veth0_server_ip[4]} | grep \"mtu.*$default_min_pmtu\""
 		[ $? -ne 0 ] && rlRun -l "$CLIENTNS ip route get ${veth0_server_ip[4]}"
 		rlRun "$CLIENTNS ip route flush cache"
@@ -310,7 +310,7 @@ rlPhaseStartTest "ip_no_pmtu_disc_test_$DO_SEC"
 	[ $? -ne 1 ] && rlRun -l "$CLIENTNS ip route get ${veth0_server_ip[4]}"
 	rlRun "$CLIENTNS ip route flush cache"
 	rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t TCP_STREAM -l 1 -- -m 16k &"
-#	rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t SCTP_STREAM -l 1 -- -m 16k &"
+	rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t SCTP_STREAM -l 1 -- -m 16k &"
 	rlRun "sleep 5"
 	rlRun "pkill -9 netperf" "0-255"
 	rlRun "$CLIENTNS ip route get ${veth0_server_ip[4]} | grep \"expires\"" "1"
@@ -319,7 +319,7 @@ rlPhaseStartTest "ip_no_pmtu_disc_test_$DO_SEC"
 
 	rlRun "$CLIENTNS sysctl -w net.ipv4.ip_no_pmtu_disc=$default_no_pmtu_disc"
 	rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t TCP_STREAM -l 1 -- -m 16k"
-#	rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t SCTP_STREAM -l 1 -- -m 16k"
+	rlRun "$CLIENTNS netperf -4 -H ${veth0_server_ip[4]} -t SCTP_STREAM -l 1 -- -m 16k"
 	rlRun "$CLIENTNS ip route flush cache"
 	rlRun "$ROUTE0NS ip link set veth0_route0 mtu 1500"
 
@@ -450,8 +450,7 @@ rlPhaseStartTest "mtu_firsthop_$DO_SEC"
 		sleep 1
 	done
 
-#	for tmppid in $tcp4_pid $sctp4_pid $udp4_pid $tcp6_pid $sctp6_pid $udp6_pid
-	for tmppid in $tcp4_pid $sctp4_pid $udp4_pid $tcp6_pid $udp6_pid
+	for tmppid in $tcp4_pid $sctp4_pid $udp4_pid $tcp6_pid $sctp6_pid $udp6_pid
 	do
 		rlRun "wait $tmppid"
 	done
