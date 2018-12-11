@@ -87,11 +87,12 @@ netperf_install()
 
         local OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
 #        SRC_NETPERF="netperf-20160222.tar.bz2"
-        git clone https://github.com/HewlettPackard/netperf/
         pushd ${NETWORK_COMMONLIB_DIR} 1>/dev/null
+        git clone https://github.com/HewlettPackard/netperf/
+#        pushd ${NETWORK_COMMONLIB_DIR} 1>/dev/null
 #        tar xjvf $SRC_NETPERF
 #        cd netperf-20160222
-        cd netperf
+         pushd netperf
         ./autogen.sh
         check_arch
         if checksctp; then
@@ -100,6 +101,7 @@ netperf_install()
                 ./configure && make && make install | tee -a $OUTPUTFILE
         fi
         popd 1>/dev/null
+	popd 1>/dev/null
 
         if ! netperf -V;then
                 echo "WARN : Netperf install fail" | tee -a $OUTPUTFILE
