@@ -34,7 +34,7 @@ lksctp_install()
 }
 
 
-ctp-tools_install()
+lksctp-tools_install()
 {
     [ -a /usr/local/bin/bindx_test ] && return 0
 
@@ -67,8 +67,8 @@ ctp-tools_install()
 
     if ! [ -a /usr/local/bin/bindx_test ];then
        echo "WARN : lksctp-tools install fail"
-       test_fail "lksctp-tools_install_fail"
-       return 1
+       test_warn "lksctp-tools_install_fail"
+       rhts-abort -t recipe
     fi
 
     test_pass "lksctp-tools_install_pass"
@@ -86,10 +86,13 @@ netperf_install()
         lksctp_install
 
         local OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
-        SRC_NETPERF="netperf-20160222.tar.bz2"
+#        SRC_NETPERF="netperf-20160222.tar.bz2"
+        git clone https://github.com/HewlettPackard/netperf/
         pushd ${NETWORK_COMMONLIB_DIR} 1>/dev/null
-        tar xjvf $SRC_NETPERF
-        cd netperf-20160222
+#        tar xjvf $SRC_NETPERF
+#        cd netperf-20160222
+        cd netperf
+        ./autogen.sh
         check_arch
         if checksctp; then
                 ./configure --enable-sctp && make && make install | tee -a $OUTPUTFILE
@@ -101,7 +104,7 @@ netperf_install()
         if ! netperf -V;then
                 echo "WARN : Netperf install fail" | tee -a $OUTPUTFILE
                 test_fail "Netperf_install_fail"
-                return 1
+                rhts-abort -t recipe
         fi
 
         test_pass "Netperf_install_pass"
