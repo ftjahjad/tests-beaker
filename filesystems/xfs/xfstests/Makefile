@@ -96,6 +96,7 @@ $(METADATA): Makefile
 	@echo "Requires:     xfsprogs-qa-devel" >> $(METADATA)
 	@echo "Requires:     samba samba-client cifs-utils" >> $(METADATA)
 	@echo "Requires:     rpcbind nfs-utils" >> $(METADATA)
+	@echo "Requires:     rpcgen           " >> $(METADATA)
 	@echo "Requires:     lvm2 beakerlib" >> $(METADATA)
 	@echo "RhtsRequires: test(/kernel/filesystems/xfs/include)" >> $(METADATA)
 	rhts-lint $(METADATA)
