@@ -1,16 +1,16 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-#   Makefile of /kernel/virt/kvm-unit-test
-#   Description: kvm sanity testing
-#   Author: Rachel Sibley <rasibley@redhat.com>
+#   Makefile of /CoreOS/httpd/Sanity/mod_ssl-smoke
+#   Description: try to reinstall mod_ssl and run httpd with mod_ssl
+#   Author: Ondrej Ptak <optak@redhat.com>
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-#   Copyright (c) 2018 Red Hat, Inc. All rights reserved.
+#   Copyright (c) 2014 Red Hat, Inc.
 #
 #   This copyrighted material is made available to anyone wishing
 #   to use, modify, copy, or redistribute it subject to the terms
-#   and conditions of the GNU General Public License version 3.
+#   and conditions of the GNU General Public License version 2.
 #
 #   This program is distributed in the hope that it will be
 #   useful, but WITHOUT ANY WARRANTY; without even the implied
@@ -24,12 +24,12 @@
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-export TEST=/kernel/virt/kvm-unit-test
+export TEST=/CoreOS/httpd/Sanity/mod_ssl-smoke
 export TESTVERSION=1.0
 
 BUILT_FILES=
 
-FILES=$(METADATA) runtest.sh Makefile PURPOSE unittests.cfg
+FILES=$(METADATA) runtest.sh Makefile PURPOSE run_postinstall_script.py
 
 .PHONY: all install download clean
 
@@ -46,19 +46,20 @@ clean:
 include /usr/share/rhts/lib/rhts-make.include
 
 $(METADATA): Makefile
-	@echo "Owner:           Rachel Sibley <rasibley@redhat.com>" > $(METADATA)
+	@echo "Owner:           Ondrej Ptak <optak@redhat.com>" > $(METADATA)
 	@echo "Name:            $(TEST)" >> $(METADATA)
 	@echo "TestVersion:     $(TESTVERSION)" >> $(METADATA)
 	@echo "Path:            $(TEST_DIR)" >> $(METADATA)
-	@echo "Description:     kvm unit testing" >> $(METADATA)
-	@echo "Type:            Stress" >> $(METADATA)
-	@echo "TestTime:        30m" >> $(METADATA)
-	@echo "RunFor:          kernel" >> $(METADATA)
-	@echo "Requires:        qemu-kvm" >> $(METADATA)
-	@echo "Requires:        git" >> $(METADATA)
-	@echo "Requires:        gcc" >> $(METADATA)
+	@echo "Description:     try to reinstall mod_ssl and run httpd with mod_ssl" >> $(METADATA)
+	@echo "Type:            Sanity" >> $(METADATA)
+	@echo "TestTime:        5m" >> $(METADATA)
+	@echo "RunFor:          httpd" >> $(METADATA)
+	@echo "Requires:        httpd mod_ssl python" >> $(METADATA)
+	@echo "Requires:        python2 python3" >> $(METADATA)
+	@echo "Requires:        python3-lxml" >> $(METADATA)
+	@echo "RhtsRequires:    library(httpd/http)" >> $(METADATA)
 	@echo "Priority:        Normal" >> $(METADATA)
-	@echo "License:         GPLv3" >> $(METADATA)
+	@echo "License:         GPLv2" >> $(METADATA)
 	@echo "Confidential:    no" >> $(METADATA)
 	@echo "Destructive:     no" >> $(METADATA)
 

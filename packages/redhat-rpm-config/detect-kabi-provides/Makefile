@@ -1,16 +1,16 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-#   Makefile of /kernel/virt/kvm-unit-test
-#   Description: kvm sanity testing
-#   Author: Rachel Sibley <rasibley@redhat.com>
+#   Makefile of /CoreOS/redhat-rpm-config/Sanity/bz1004930-detect-kabi-provides
+#   Description: Test for BZ#1004930 (kernel-tools-3.10.0-11.el7.x86_64 requires)
+#   Author: Karel Srot <ksrot@redhat.com>
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-#   Copyright (c) 2018 Red Hat, Inc. All rights reserved.
+#   Copyright (c) 2013 Red Hat, Inc. All rights reserved.
 #
 #   This copyrighted material is made available to anyone wishing
 #   to use, modify, copy, or redistribute it subject to the terms
-#   and conditions of the GNU General Public License version 3.
+#   and conditions of the GNU General Public License version 2.
 #
 #   This program is distributed in the hope that it will be
 #   useful, but WITHOUT ANY WARRANTY; without even the implied
@@ -24,12 +24,12 @@
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-export TEST=/kernel/virt/kvm-unit-test
+export TEST=/CoreOS/redhat-rpm-config/Sanity/bz1004930-detect-kabi-provides
 export TESTVERSION=1.0
 
 BUILT_FILES=
 
-FILES=$(METADATA) runtest.sh Makefile PURPOSE unittests.cfg
+FILES=$(METADATA) runtest.sh Makefile PURPOSE symvers-foo.spec
 
 .PHONY: all install download clean
 
@@ -46,20 +46,20 @@ clean:
 include /usr/share/rhts/lib/rhts-make.include
 
 $(METADATA): Makefile
-	@echo "Owner:           Rachel Sibley <rasibley@redhat.com>" > $(METADATA)
+	@echo "Owner:           Karel Srot <ksrot@redhat.com>" > $(METADATA)
 	@echo "Name:            $(TEST)" >> $(METADATA)
 	@echo "TestVersion:     $(TESTVERSION)" >> $(METADATA)
 	@echo "Path:            $(TEST_DIR)" >> $(METADATA)
-	@echo "Description:     kvm unit testing" >> $(METADATA)
-	@echo "Type:            Stress" >> $(METADATA)
-	@echo "TestTime:        30m" >> $(METADATA)
-	@echo "RunFor:          kernel" >> $(METADATA)
-	@echo "Requires:        qemu-kvm" >> $(METADATA)
-	@echo "Requires:        git" >> $(METADATA)
-	@echo "Requires:        gcc" >> $(METADATA)
+	@echo "Description:     Test for BZ#1004930 (kernel-tools-3.10.0-11.el7.x86_64 requires)" >> $(METADATA)
+	@echo "Type:            Sanity" >> $(METADATA)
+	@echo "TestTime:        5m" >> $(METADATA)
+	@echo "RunFor:          redhat-rpm-config" >> $(METADATA)
+	@echo "Requires:        redhat-rpm-config rpm-build kernel-devel" >> $(METADATA)
 	@echo "Priority:        Normal" >> $(METADATA)
-	@echo "License:         GPLv3" >> $(METADATA)
+	@echo "License:         GPLv2" >> $(METADATA)
 	@echo "Confidential:    no" >> $(METADATA)
 	@echo "Destructive:     no" >> $(METADATA)
+	@echo "Bug:             1004930" >> $(METADATA)
+	@echo "Releases:        -RHEL4 -RHELClient5 -RHELServer5 -RHEL6" >> $(METADATA)
 
 	rhts-lint $(METADATA)

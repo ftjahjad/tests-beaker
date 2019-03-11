@@ -4,35 +4,26 @@
 
 ARCH=$(uname -m)
 REBOOTCOUNT=${REBOOTCOUNT:-0}
+YUM=""
 
-# Output version of the kernel contained in the specified kernel package
-# tarball.
-#
-# Args: tarball
-# Output: kernel version, nothing if not found
-# Status: zero if version is found, non-zero on failure
 function get_kpkg_ver()
 {
-  case "$KPKG" in
+
+  case "${KPKG_URL}" in
     *.tar.gz)
-            tar tf "$1" | sed -ne '/^boot\/vmlinu[xz]-[1-9]/ {s/^[^-]*-//p;q}; $Q1'
+            declare -r kpkg=${KPKG_URL##*/}
+            tar tf "$kpkg" | sed -ne '/^boot\/vmlinu[xz]-[1-9]/ {s/^[^-]*-//p;q}; $Q1'
             ;;
     *)
-            # replace '-' with ' ' and use natural IFS to split into an array
-            karray=(${1//-/ })
-            if [ "${#karray[@]}" == "3" ]; then
-              echo "${karray[1]}-${karray[2]}.$ARCH"
-            elif [ "${#karray[@]}" == "4" ]; then
-              # uname -r have variants at the end
-              KVAR="${karray[1]}"
-              echo "${karray[2]}-${karray[3]}$KVAR.$ARCH"
-            fi
+            # Grab the kernel version from the provided repo directly
+            ${YUM} -q --disablerepo="*" --enablerepo="kernel-cki" list "${AVAILABLE}" kernel --showduplicates | awk -v arch="$ARCH" '/kernel-cki/ {print $2"."arch}'
             ;;
   esac
 }
 
 function targz_install()
 {
+  declare -r kpkg=${KPKG_URL##*/}
   echo "Fetching kpkg from ${KPKG_URL}" | tee -a ${OUTPUTFILE}
   curl -OL "${KPKG_URL}" >>${OUTPUTFILE} 2>&1
 
@@ -42,18 +33,18 @@ function targz_install()
     exit 1
   fi
 
-  echo "Extracting kernel version from package ${KPKG}" | tee -a ${OUTPUTFILE}
-  KVER=$(get_kpkg_ver "$KPKG")
-  if [ -z ${KVER} ]; then
+  echo "Extracting kernel version from ${KPKG_URL}" | tee -a ${OUTPUTFILE}
+  KVER=$(get_kpkg_ver)
+  if [ -z "${KVER}" ]; then
     echo "Failed to extract kernel version from the package" | tee -a ${OUTPUTFILE}
     rhts-abort -t recipe
     exit 1
   fi
 
-  tar xfh ${KPKG} -C / >>${OUTPUTFILE} 2>&1
+  tar xfh ${kpkg} -C / >>${OUTPUTFILE} 2>&1
 
   if [ $? -ne 0 ]; then
-    echo "Failed to extract package ${KPKG}" | tee -a ${OUTPUTFILE}
+    echo "Failed to extract package ${kpkg}" | tee -a ${OUTPUTFILE}
     rhts-abort -t recipe
     exit 1
   fi
@@ -112,62 +103,69 @@ function targz_install()
   fi
 }
 
-function rpm_install()
+function select_yum_tool()
 {
-  echo "Extracting kernel version from package ${KPKG}" | tee -a ${OUTPUTFILE}
-  KVER=$(get_kpkg_ver "$KPKG")
-  if [ -z ${KVER} ]; then
-    echo "Failed to extract kernel version from the package" | tee -a ${OUTPUTFILE}
-    rhts-abort -t recipe
-    exit 1
-  fi
-
-  # setup yum repo based on url
-  URL=${KPKG_URL%/*}
-  cat > /etc/yum.repos.d/new-kernel.repo << EOF
-[new-kernel]
-name=kernel $KVER
-baseurl=${URL}/\$basearch/
-enabled=1
-gpgcheck=0
-skip_if_unavailable=1
-EOF
-  echo "Setup kernel repo file" >> ${OUTPUTFILE}
-  cat /etc/yum.repos.d/new-kernel.repo >> ${OUTPUTFILE}
-
   if [ -x /usr/bin/yum ]; then
     YUM=/usr/bin/yum
+    AVAILABLE="available"
   elif [ -x /usr/bin/dnf ]; then
     YUM=/usr/bin/dnf
+    AVAILABLE="--available"
   else
     echo "No tool to download kernel from a repo" | tee -a ${OUTPUTFILE}
     rhts-abort -t recipe
     exit 1
   fi
+}
 
-  $YUM install -y kernel-$KVER kernel-headers-$KVER >>${OUTPUTFILE} 2>&1
+function rpm_install()
+{
+  # setup yum repo based on url
+  cat > /etc/yum.repos.d/kernel-cki.repo << EOF
+[kernel-cki]
+name=kernel-cki
+baseurl=${KPKG_URL}
+enabled=1
+gpgcheck=0
+EOF
+  echo "Setup kernel repo file" >> ${OUTPUTFILE}
+  cat /etc/yum.repos.d/kernel-cki.repo >> ${OUTPUTFILE}
+
+  # set YUM var.
+  select_yum_tool
+
+  echo "Extracting kernel version from ${KPKG_URL}" | tee -a ${OUTPUTFILE}
+  KVER="$(get_kpkg_ver)"
+  if [ -z "${KVER}" ]; then
+    echo "Failed to extract kernel version from the package" | tee -a ${OUTPUTFILE}
+    rhts-abort -t recipe
+    exit 1
+  fi
+
+  $YUM install -y "kernel-$KVER" "kernel-headers-$KVER" >>${OUTPUTFILE} 2>&1
   if [ $? -ne 0 ]; then
     echo "Failed to install kernel!" | tee -a ${OUTPUTFILE}
     exit 1
   fi
-  $YUM install -y kernel-firmware >>${OUTPUTFILE} 2>&1
-  if [ $? -ne 0 ]; then
-    echo "Unable to install kernel-firmware, skipping" | tee -a ${OUTPUTFILE}
+
+  # The package was renamed (and temporarily aliased) in Fedora/RHEL
+  if $YUM search kernel-firmware | grep kernel-firmware ; then
+      $YUM install -y kernel-firmware >>${OUTPUTFILE} 2>&1
+  else
+      $YUM install -y linux-firmware >>${OUTPUTFILE} 2>&1
   fi
 
   return 0
 }
 
 if [ ${REBOOTCOUNT} -eq 0 ]; then
-  if [ -z ${KPKG_URL} ]; then
+  if [ -z "${KPKG_URL}" ]; then
     echo "No KPKG_URL specified" | tee -a ${OUTPUTFILE}
     rhts-abort -t recipe
     exit 1
   fi
 
-  KPKG=${KPKG_URL##*/}
-
-  case "$KPKG" in
+  case "${KPKG_URL}" in
     *.tar.gz)
              targz_install ;;
     *)
@@ -184,11 +182,12 @@ if [ ${REBOOTCOUNT} -eq 0 ]; then
   report_result ${TEST}/kernel-in-place PASS 0
   rhts-reboot
 else
-  KPKG=${KPKG_URL##*/}
+  # set YUM var.
+  select_yum_tool
 
-  echo "Extracting kernel version from package ${KPKG}" | tee -a ${OUTPUTFILE}
-  KVER=$(get_kpkg_ver "$KPKG")
-  if [ -z ${KVER} ]; then
+  echo "Extracting kernel version from ${KPKG_URL}" | tee -a ${OUTPUTFILE}
+  KVER=$(get_kpkg_ver)
+  if [ -z "${KVER}" ]; then
     echo "Failed to extract kernel version from the package" | tee -a ${OUTPUTFILE}
     rhts-abort -t recipe
     exit 1

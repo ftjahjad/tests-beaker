@@ -1,16 +1,16 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-#   Makefile of /kernel/virt/kvm-unit-test
-#   Description: kvm sanity testing
-#   Author: Rachel Sibley <rasibley@redhat.com>
+#   Makefile of /CoreOS/tuned/Sanity/tune-processes-through-perf
+#   Description: Test if we can tune new process via perf
+#   Author: Branislav Blaskovic <bblaskov@redhat.com>
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-#   Copyright (c) 2018 Red Hat, Inc. All rights reserved.
+#   Copyright (c) 2015 Red Hat, Inc.
 #
 #   This copyrighted material is made available to anyone wishing
 #   to use, modify, copy, or redistribute it subject to the terms
-#   and conditions of the GNU General Public License version 3.
+#   and conditions of the GNU General Public License version 2.
 #
 #   This program is distributed in the hope that it will be
 #   useful, but WITHOUT ANY WARRANTY; without even the implied
@@ -24,12 +24,12 @@
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-export TEST=/kernel/virt/kvm-unit-test
+export TEST=/CoreOS/tuned/Sanity/tune-processes-through-perf
 export TESTVERSION=1.0
 
 BUILT_FILES=
 
-FILES=$(METADATA) runtest.sh Makefile PURPOSE unittests.cfg
+FILES=$(METADATA) runtest.sh Makefile PURPOSE test-tuned-perf
 
 .PHONY: all install download clean
 
@@ -46,20 +46,21 @@ clean:
 include /usr/share/rhts/lib/rhts-make.include
 
 $(METADATA): Makefile
-	@echo "Owner:           Rachel Sibley <rasibley@redhat.com>" > $(METADATA)
+	@echo "Owner:           Branislav Blaskovic <bblaskov@redhat.com>" > $(METADATA)
 	@echo "Name:            $(TEST)" >> $(METADATA)
 	@echo "TestVersion:     $(TESTVERSION)" >> $(METADATA)
 	@echo "Path:            $(TEST_DIR)" >> $(METADATA)
-	@echo "Description:     kvm unit testing" >> $(METADATA)
-	@echo "Type:            Stress" >> $(METADATA)
-	@echo "TestTime:        30m" >> $(METADATA)
-	@echo "RunFor:          kernel" >> $(METADATA)
-	@echo "Requires:        qemu-kvm" >> $(METADATA)
-	@echo "Requires:        git" >> $(METADATA)
-	@echo "Requires:        gcc" >> $(METADATA)
+	@echo "Description:     Test if we can tune new process via perf" >> $(METADATA)
+	@echo "Type:            Sanity" >> $(METADATA)
+	@echo "TestTime:        5m" >> $(METADATA)
+	@echo "RunFor:          tuned" >> $(METADATA)
+	@echo "Requires:        tuned" >> $(METADATA)
+	@echo "RhtsRequires:    library(tuned/basic)" >> $(METADATA)
 	@echo "Priority:        Normal" >> $(METADATA)
-	@echo "License:         GPLv3" >> $(METADATA)
+	@echo "License:         GPLv2" >> $(METADATA)
 	@echo "Confidential:    no" >> $(METADATA)
 	@echo "Destructive:     no" >> $(METADATA)
+	@echo "Bug:             1148546" >> $(METADATA)
+	@echo "Releases:        -RHEL4 -RHEL6 -RHELClient5 -RHELServer5" >> $(METADATA)
 
 	rhts-lint $(METADATA)

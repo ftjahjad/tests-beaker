@@ -1,16 +1,16 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-#   Makefile of /kernel/virt/kvm-unit-test
-#   Description: kvm sanity testing
-#   Author: Rachel Sibley <rasibley@redhat.com>
+#   Makefile of /CoreOS/i2c-tools/Sanity/i2cdetect-smoke
+#   Description: Loads i2c-dev module, tries i2cdetect -l. If something is detected probes for more info.
+#   Author: Lukas Zachar <lzachar@redhat.com>
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-#   Copyright (c) 2018 Red Hat, Inc. All rights reserved.
+#   Copyright (c) 2012 Red Hat, Inc. All rights reserved.
 #
 #   This copyrighted material is made available to anyone wishing
 #   to use, modify, copy, or redistribute it subject to the terms
-#   and conditions of the GNU General Public License version 3.
+#   and conditions of the GNU General Public License version 2.
 #
 #   This program is distributed in the hope that it will be
 #   useful, but WITHOUT ANY WARRANTY; without even the implied
@@ -24,12 +24,12 @@
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-export TEST=/kernel/virt/kvm-unit-test
+export TEST=/CoreOS/i2c-tools/sanity/i2cdetect-smoke
 export TESTVERSION=1.0
 
 BUILT_FILES=
 
-FILES=$(METADATA) runtest.sh Makefile PURPOSE unittests.cfg
+FILES=$(METADATA) runtest.sh Makefile PURPOSE
 
 .PHONY: all install download clean
 
@@ -46,19 +46,18 @@ clean:
 include /usr/share/rhts/lib/rhts-make.include
 
 $(METADATA): Makefile
-	@echo "Owner:           Rachel Sibley <rasibley@redhat.com>" > $(METADATA)
+	@echo "Owner:           Lukas Zachar <lzachar@redhat.com>" > $(METADATA)
 	@echo "Name:            $(TEST)" >> $(METADATA)
 	@echo "TestVersion:     $(TESTVERSION)" >> $(METADATA)
 	@echo "Path:            $(TEST_DIR)" >> $(METADATA)
-	@echo "Description:     kvm unit testing" >> $(METADATA)
-	@echo "Type:            Stress" >> $(METADATA)
-	@echo "TestTime:        30m" >> $(METADATA)
-	@echo "RunFor:          kernel" >> $(METADATA)
-	@echo "Requires:        qemu-kvm" >> $(METADATA)
-	@echo "Requires:        git" >> $(METADATA)
-	@echo "Requires:        gcc" >> $(METADATA)
+	@echo "Description:     Loads i2c-dev module, tries i2cdetect -l. If something is detected probes for more info." >> $(METADATA)
+	@echo "Type:            Sanity" >> $(METADATA)
+	@echo "TestTime:        5m" >> $(METADATA)
+	@echo "RunFor:          i2c-tools" >> $(METADATA)
+	@echo "Requires:        i2c-tools" >> $(METADATA)
+	@echo "Requires:        python3-lxml" >> $(METADATA)
 	@echo "Priority:        Normal" >> $(METADATA)
-	@echo "License:         GPLv3" >> $(METADATA)
+	@echo "License:         GPLv2" >> $(METADATA)
 	@echo "Confidential:    no" >> $(METADATA)
 	@echo "Destructive:     no" >> $(METADATA)
 
