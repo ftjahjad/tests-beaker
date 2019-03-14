@@ -1,0 +1,2 @@
+Run stress-ng tests
+  git://kernel.ubuntu.com/cking/stress-ng.git
