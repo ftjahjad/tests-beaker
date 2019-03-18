@@ -33,7 +33,7 @@
 GIT_URL=${GIT_URL:-"git://kernel.ubuntu.com/cking/stress-ng.git"}
 # Optional test git branch
 #GIT_BRANCH=${GIT_BRANCH:-"master"}
-GIT_BRANCH=${GIT_BRANCH:-"tags/V0.09.55"}
+GIT_BRANCH=${GIT_BRANCH:-"tags/V0.09.56"}
 
 rlJournalStart
 BUILDDIR="stress-ng"
@@ -66,8 +66,8 @@ rlPhaseStartSetup
 rlPhaseEnd
 
 rlPhaseStartTest
-#    FLAGS="--all 0 --timeout 300 --verbose"
-    FLAGS="--sequential 0 --timeout 300 --verbose"
+    FLAGS="--all 0 --timeout 300 --verbose"
+#    FLAGS="--sequential 0 --timeout 300 --verbose"
     rlRun "${BUILDDIR}/stress-ng --class interrupt ${FLAGS}" 0 "Running stress-ng on class interrupt for 5 minutes"
     rlRun "${BUILDDIR}/stress-ng --class cpu       ${FLAGS} ${EXCLUDE_CPU}" 0 "Running stress-ng on class cpu for 5 minutes"
     rlRun "${BUILDDIR}/stress-ng --class cpu-cache ${FLAGS}" 0 "Running stress-ng on class cpu-cache for 5 minutes"
