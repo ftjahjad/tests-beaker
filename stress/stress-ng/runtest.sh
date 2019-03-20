@@ -68,7 +68,8 @@ rlPhaseEnd
 rlPhaseStartTest
 #    FLAGS="--all 0 --timeout 300 --verbose"
 #    FLAGS="--sequential 0 --timeout 300 --verbose"
-    FLAGS="--all 0 --timeout 30 --verbose"
+#    FLAGS="--all 0 --timeout 30 --verbose"
+    FLAGS="--sequential 0 --timeout 30 --verbose"
     rlRun "${BUILDDIR}/stress-ng --class interrupt ${FLAGS}" 0 "Running stress-ng on class interrupt for 5 minutes"
     rlRun "${BUILDDIR}/stress-ng --class cpu       ${FLAGS} ${EXCLUDE_CPU}" 0 "Running stress-ng on class cpu for 5 minutes"
     rlRun "${BUILDDIR}/stress-ng --class cpu-cache ${FLAGS}" 0 "Running stress-ng on class cpu-cache for 5 minutes"
