@@ -44,13 +44,50 @@ GIT_BRANCH=${GIT_BRANCH:-"tags/V0.09.56"}
 rlJournalStart
 BUILDDIR="stress-ng"
 
-EXCLUDE_CPU=""
-EXCLUDE_OS=""
+#EXCLUDE_CPU=""
+#EXCLUDE_OS=""
+#ARCH=`uname -m`
+#case ${ARCH} in
+#    (x86_64)
+#        EXCLUDE_CPU="-exclude cpu-online"
+#        EXCLUDE_OS="--exclude chroot,cpu-online,dnotify,inode-flags,mmapaddr,mmapfixed,quota,rlimit,spawn,swap"
+#        ;;
+#esac
+
+# exclude specific tests from the classes
+# cpu hotplug testing is handled in other Beaker tasks
+EXCLUDE_CPU="--exclude cpu-online"
+EXCLUDE_OS="--exclude cpu-online"
+# RHEL uses SELinux, not AppArmor
+EXCLUDE_OS="${EXCLUDE_OS},apparmor"
+# tests which trigger SELinux AVCs
+EXCLUDE_OS="${EXCLUDE_OS},mmapaddr,mmapfixed"
+# tests which report fail
+EXCLUDE_OS="${EXCLUDE_OS},dnotify"
+# tests which report error
+EXCLUDE_OS="${EXCLUDE_OS},bind-mount,exec,inode-flags,mlockmany,oom-pipe,spawn,swap,watchdog"
+# systemd-coredump does not like these stressors
+EXCLUDE_OS="${EXCLUDE_OS},bad-altstack,opcode"
+# architecture specific excludes
 ARCH=`uname -m`
 case ${ARCH} in
-    (x86_64)
-        EXCLUDE_CPU="-exclude cpu-online"
-        EXCLUDE_OS="--exclude chroot,cpu-online,dnotify,inode-flags,mmapaddr,mmapfixed,quota,rlimit,spawn,swap"
+    aarch64)
+        ;;
+    ppc64|ppc64le)
+        # POWER does not have UEFI firmware
+        EXCLUDE_OS="${EXCLUDE_OS},efivar"
+        ;;
+    s390x)
+        # System z does not have UEFI firmware
+        EXCLUDE_OS="${EXCLUDE_OS},efivar"
+        ;;
+    x86_64)
+        # x86 may have either UEFI or Legacy BIOS
+        if [ ! -d /sys/firmware/efi/vars ] ; then
+            EXCLUDE_OS="${EXCLUDE_OS},efivar"
+        fi
+        ;;
+    *)
         ;;
 esac
 
