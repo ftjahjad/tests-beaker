@@ -31,6 +31,7 @@
 
 
 rlJournalStart
+
 BUILDDIR="stress-ng"
 
 # task parameters
@@ -39,59 +40,10 @@ TIMEOUT=${TIMEOUT:-30}
 EXTRA_FLAGS=${EXTRA_FLAGS:-}
 CLASSES=${CLASSES:-interrupt cpu cpu-cache memory os}
 
-# - stress-ng git location
+# stress-ng git location
 GIT_URL=${GIT_URL:-"git://kernel.ubuntu.com/cking/stress-ng.git"}
-# Optional test git branch
-#GIT_BRANCH=${GIT_BRANCH:-"master"}
+# current release
 GIT_BRANCH=${GIT_BRANCH:-"tags/V0.09.56"}
-
-#EXCLUDE_CPU=""
-#EXCLUDE_OS=""
-#ARCH=`uname -m`
-#case ${ARCH} in
-#    (x86_64)
-#        EXCLUDE_CPU="-exclude cpu-online"
-#        EXCLUDE_OS="--exclude chroot,cpu-online,dnotify,inode-flags,mmapaddr,mmapfixed,quota,rlimit,spawn,swap"
-#        ;;
-#esac
-###############################3
-# exclude specific tests from the classes
-# cpu hotplug testing is handled in other Beaker tasks
-#EXCLUDE_CPU="--exclude cpu-online"
-#EXCLUDE_OS="--exclude cpu-online"
-# RHEL uses SELinux, not AppArmor
-#EXCLUDE_OS="${EXCLUDE_OS},apparmor"
-# tests which trigger SELinux AVCs
-#EXCLUDE_OS="${EXCLUDE_OS},mmapaddr,mmapfixed"
-# tests which report fail
-#EXCLUDE_OS="${EXCLUDE_OS},dnotify"
-# tests which report error
-#EXCLUDE_OS="${EXCLUDE_OS},bind-mount,exec,inode-flags,mlockmany,oom-pipe,spawn,swap,watchdog"
-# systemd-coredump does not like these stressors
-#EXCLUDE_OS="${EXCLUDE_OS},bad-altstack,opcode"
-# architecture specific excludes
-#ARCH=`uname -m`
-#case ${ARCH} in
-#    aarch64)
-#        ;;
-#    ppc64|ppc64le)
-#        # POWER does not have UEFI firmware
-#        EXCLUDE_OS="${EXCLUDE_OS},efivar"
-#        ;;
-#    s390x)
-#        # System z does not have UEFI firmware
-#        EXCLUDE_OS="${EXCLUDE_OS},efivar"
-#        ;;
-#    x86_64)
-#        # x86 may have either UEFI or Legacy BIOS
-#        if [ ! -d /sys/firmware/efi/vars ] ; then
-#            EXCLUDE_OS="${EXCLUDE_OS},efivar"
-#        fi
-#        ;;
-#    *)
-#        ;;
-#esac
-######################################################3
 
 # initialize test exclusion lists
 # NOTE: be sure to use the += operator to append to the exclusion list!!!
@@ -105,7 +57,7 @@ EXCLUDE+=",mmapaddr,mmapfixed"
 # tests which report fail
 EXCLUDE+=",dnotify"
 # tests which report error
-EXCLUDE+=",bind-mount,exec,inode-flags,mlockmany,oom-pipe,spawn,swap,watchdog,dirdeep"
+EXCLUDE+=",bind-mount,exec,inode-flags,mlockmany,oom-pipe,spawn,swap,watchdog,daemon"
 # systemd-coredump does not like these stressors
 EXCLUDE+=",bad-altstack,opcode"
 # fanotify fails on systems with many CPUs (>128?):
@@ -158,18 +110,6 @@ rlPhaseStartSetup
     rlRun "make" 0 "Building stress-ng"
     rlRun "popd" 0 "Done building stress-ng"
 
-#    if [ -f /lib/systemd/systemd ] ; then
-#        if [ ! -d /etc/systemd/coredump.conf.d ] ; then
-#            mkdir /etc/systemd/coredump.conf.d
-#        fi
-#        cat >/etc/systemd/coredump.conf.d/stress-ng.conf <<EOF
-#[Coredump]
-#Storage=none
-#ProcessSizeMax=0
-#EOF
-#        systemctl restart systemd-coredump.socket
-#    fi
-##############################################
     #disable systemd-coredump collection
     if [ -f /lib/systemd/systemd ] ; then
         rlLog "Disabling systemd-coredump collection"
@@ -186,38 +126,6 @@ EOF
 rlPhaseEnd
 
 rlPhaseStartTest
-#    FLAGS="--all 0 --timeout 300 --verbose"
-#    FLAGS="--sequential 0 --timeout 300 --verbose"
-#    FLAGS="--all 0 --timeout 30 --verbose"
-#    FLAGS="--sequential 0 --timeout 30 --verbose"
-#    rlRun "${BUILDDIR}/stress-ng --class interrupt ${FLAGS}" 0 "Running stress-ng on class interrupt for 5 minutes"
-#    rlRun "${BUILDDIR}/stress-ng --class cpu       ${FLAGS} ${EXCLUDE_CPU}" 0 "Running stress-ng on class cpu for 5 minutes"
-#    rlRun "${BUILDDIR}/stress-ng --class cpu-cache ${FLAGS}" 0 "Running stress-ng on class cpu-cache for 5 minutes"
-#    rlRun "${BUILDDIR}/stress-ng --class memory    ${FLAGS}" 0 "Running stress-ng on class memory for 5 minutes"
-#    rlRun "${BUILDDIR}/stress-ng --class os        ${FLAGS} ${EXCLUDE_OS}" 0 "Running stress-ng on class os for 5 minutes"
-#
-#    for CLASS in ${CLASSES} ; do
-#        FLAGS="--class ${CLASS} --sequential 0 --timeout ${TIMEOUT} --log-file ${CLASS}.log ${EXTRA_FLAGS}"
-#        case ${CLASS} in
-#            cpu)
-#                FLAGS="${FLAGS} ${EXCLUDE_CPU}"
-#                ;;
-#            os)
-#                FLAGS="${FLAGS} ${EXCLUDE_OS}"
-#                ;;
-#        esac
-#
-#        rlRun "${BUILDDIR}/stress-ng ${FLAGS}" \
-#            0 "Running stress-ng on class ${CLASS} for ${TIMEOUT} seconds per stressor"
-#
-#        RESULT="PASS"
-#        if [ $? -ne 0 ] ; then
-#            RESULT="FAIL"
-#        fi
-#
-#        rlReport "Class ${CLASS}" ${RESULT} 0 ${CLASS}.log
-#    done
-#################################################################################
     for CLASS in ${CLASSES} ; do
         FLAGS="--class ${CLASS} --sequential 0 --timeout ${TIMEOUT} --log-file ${CLASS}.log ${EXTRA_FLAGS}"
         if [ -n "${EXCLUDE}" ]; then
@@ -247,13 +155,7 @@ rlPhaseStartCleanup
 rlPhaseEnd
 
 rlPhaseStartCleanup
-    # do something
     # restore default systemd-coredump config
-    #if [ -f /lib/systemd/systemd ] ; then
-    #    rm -f /etc/systemd/coredump.conf.d/stress-ng.conf
-    #    systemctl restart systemd-coredump.socket
-    #fi
-################################################333
     if [ -f /lib/systemd/systemd ] ; then
         rm -f /etc/systemd/coredump.conf.d/stress-ng.conf
         rlRun "systemctl unmask systemd-coredump.socket" 0 "Unmasking systemd-coredump.socket"
