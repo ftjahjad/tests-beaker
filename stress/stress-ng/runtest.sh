@@ -105,9 +105,12 @@ EXCLUDE+=",mmapaddr,mmapfixed"
 # tests which report fail
 EXCLUDE+=",dnotify"
 # tests which report error
-EXCLUDE+=",bind-mount,exec,inode-flags,mlockmany,oom-pipe,spawn,swap,watchdog"
+EXCLUDE+=",bind-mount,exec,inode-flags,mlockmany,oom-pipe,spawn,swap,watchdog,dirdeep"
 # systemd-coredump does not like these stressors
 EXCLUDE+=",bad-altstack,opcode"
+# fanotify fails on systems with many CPUs (>128?):
+#     cannot initialize fanotify, errno=24 (Too many open files)
+EXCLUDE+=",fanotify"
 # architecture specific excludes
 ARCH=`uname -m`
 case ${ARCH} in
