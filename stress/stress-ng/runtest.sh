@@ -75,6 +75,10 @@ case ${ARCH} in
         EXCLUDE+=",clone"
         # efivar with all CPUs triggers kernel panics, but works ok with 1 CPU?
         EXCLUDE+=",efivar"
+        # fcntl returns Interrupted system call error"
+        EXCLUDE+=",fcntl"
+        # getcwd returns No such file or directory error"
+        EXCLUDE+=",getcwd"
         ;;
     ppc64|ppc64le)
         # POWER does not have UEFI firmware
