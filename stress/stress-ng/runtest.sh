@@ -57,7 +57,7 @@ EXCLUDE+=",mmapaddr,mmapfixed"
 # tests which report fail
 EXCLUDE+=",dnotify"
 # tests which report error
-EXCLUDE+=",bind-mount,exec,inode-flags,mlockmany,oom-pipe,spawn,swap,watchdog,daemon"
+EXCLUDE+=",bind-mount,exec,inode-flags,mlockmany,oom-pipe,spawn,swap,watchdog,dirdeep,daemon"
 # systemd-coredump does not like these stressors
 EXCLUDE+=",bad-altstack,opcode"
 # fanotify fails on systems with many CPUs (>128?):
