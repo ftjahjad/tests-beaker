@@ -63,6 +63,10 @@ EXCLUDE+=",bad-altstack,opcode"
 # fanotify fails on systems with many CPUs (>128?):
 #     cannot initialize fanotify, errno=24 (Too many open files)
 EXCLUDE+=",fanotify"
+# RHEL specific excludes
+if rlIsRHEL 7 ; then
+    EXCLUDE+=",chroot,idle-page,rtc"
+fi
 # architecture specific excludes
 ARCH=`uname -m`
 case ${ARCH} in
