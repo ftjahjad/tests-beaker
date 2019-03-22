@@ -154,14 +154,5 @@ rlPhaseStartCleanup
     fi
 rlPhaseEnd
 
-rlPhaseStartCleanup
-    # restore default systemd-coredump config
-    if [ -f /lib/systemd/systemd ] ; then
-        rm -f /etc/systemd/coredump.conf.d/stress-ng.conf
-        rlRun "systemctl unmask systemd-coredump.socket" 0 "Unmasking systemd-coredump.socket"
-        rlRun "systemctl start systemd-coredump.socket" 0 "Restarting systemd-coredump.socket"
-    fi
-rlPhaseEnd
-
 rlJournalPrintText
 rlJournalEnd
