@@ -89,10 +89,10 @@ function check
             rlSkip "CPU doesn't support virtualization"
             return 1
         fi
-    else
-        rlSkip "test is only supported on x86_64 and aarch64"
-        return 1
-    fi
+#    else
+#        rlSkip "test is only supported on x86_64 and aarch64"
+#        return 1
+#    fi
 
     # test should only run on a system with 1 or more cpus
     typeset cpus=$(grep -c ^processor /proc/cpuinfo)
