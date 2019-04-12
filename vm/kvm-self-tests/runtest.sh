@@ -37,6 +37,7 @@ function rlSkip
 
     rlLog "Skipping test because $*"
     rhts-report-result $TEST SKIP $OUTPUTFILE
+    exit 0
 }
 
 function check_platform_support
@@ -68,7 +69,7 @@ function check_virt_support
         fi
         return $?
     else
-        return 1
+        return 0
     fi
 }
 
@@ -87,11 +88,9 @@ function check
             rlLog "Hardware supports virtualization, proceeding"
         else
             rlSkip "CPU doesn't support virtualization"
-            return 1
         fi
 #    else
 #        rlSkip "test is only supported on x86_64 and aarch64"
-#        return 1
 #    fi
 
     # test should only run on a system with 1 or more cpus
@@ -100,7 +99,6 @@ function check
         rlLog "You have sufficient CPU's to run the test"
     else
         rlSkip "system requires > 1 CPU"
-        return 1
     fi
 
     return 0
