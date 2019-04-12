@@ -76,9 +76,10 @@ function check
 {
     # test is only supported on x86_64 and aarch64
     typeset hwpf=$(uname -i)
-    check_platform_support $hwpf
-    if (( $? == 0 )); then
-        rlLog "Running on supported arch (x86_64 or aarch64)"
+# disable check supported arch
+#    check_platform_support $hwpf
+#    if (( $? == 0 )); then
+#        rlLog "Running on supported arch (x86_64 or aarch64)"
 
         # test can only run on hardware that supports virtualization
         check_virt_support $hwpf
