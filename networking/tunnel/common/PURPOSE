@@ -1,0 +1,11 @@
+PURPOSE of
+Description:
+common libs specific for tunnel testing, build env for example
+
+usage:
+
+(1) add package requires in Makefile
+@echo "RhtsRequires:    kernel-kernel-networking-tunnel-common" >> $(METADATA)
+
+(2) include common lib in script
+. /mnt/tests/kernel/networking/tunnel/common/include.sh
