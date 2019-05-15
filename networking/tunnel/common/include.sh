@@ -1,7 +1,9 @@
 #!/bin/bash
-.  ../../common/network.sh
+#.  ../../common/network.sh
 
 NIC_COMMON_DIR=$(dirname $(readlink -f $BASH_SOURCE))
+
+echo $NIC_COMMON_DIR | tee -a $OUTPUTFILE
 
 # select tool to manage package, which could be "yum" or "dnf"
 function select_yum_tool() {
