@@ -30,6 +30,7 @@
 . /usr/bin/rhts-environment.sh || exit 1
 . /usr/share/beakerlib/beakerlib.sh || exit 1
 . ../../../common/include.sh || exit 1
+. ../../../common/network.sh || exit 1
 . ../../common/include.sh || exit 1
 
 # Functions

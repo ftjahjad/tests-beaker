@@ -93,7 +93,7 @@ netns_crs_setup()
 
 	echo "source ../../common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec client bash
 	C_IFACE=$(tail -n1 /tmp/test_iface | tr -d '\r\n')
-	echo "source ../../common/common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec server bash
+	echo "source ../../common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec server bash
 	S_IFACE=$(tail -n1 /tmp/test_iface | tr -d '\r\n')
 
 	C_IFACE_R=veth0_cr
@@ -284,8 +284,7 @@ netns_3c_cleanup()
 
 
 
-iproute2_install
-which socat || ${yum} install socat -y || socat_install
+which socat || ${yum} install socat -y 
 pushd $NIC_COMMON_DIR
 for file in *.sh
 do
