@@ -171,8 +171,11 @@ netns_cs_setup()
 	ip link set veth0_s netns server
 	ip link set veth1_s netns server
 
+        ip link set veth0_c_br master br0
+        ip link set veth1_c_br master br0
 
-	ip link set veth1_s_br master br0
+        ip link set veth0_s_br master br0
+        ip link set veth1_s_br master br0
 
 	local iface
 	local iface_c
