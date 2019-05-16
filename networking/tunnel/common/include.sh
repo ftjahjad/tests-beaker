@@ -1,5 +1,5 @@
 #!/bin/bash
-source  ../../../common/network.sh
+#source  ../../../common/network.sh
 
 NIC_COMMON_DIR=$(dirname $(readlink -f $BASH_SOURCE))
 
