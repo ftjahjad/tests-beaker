@@ -1,9 +1,6 @@
 #!/bin/bash
-#source  ../../../common/network.sh
 
 NIC_COMMON_DIR=$(dirname $(readlink -f $BASH_SOURCE))
-
-echo $NIC_COMMON_DIR | tee -a $OUTPUTFILE
 
 # select tool to manage package, which could be "yum" or "dnf"
 function select_yum_tool() {
@@ -20,6 +17,9 @@ function select_yum_tool() {
 
 yum=$(select_yum_tool)
 
+# find absolute path for networking
+abs_networking_path=$(echo $(pwd) | sed 's/\/networking\/.*/\/networking/')
+echo "absolute networking path is ${abs_networking_path}"
 
 netns_crs_setup()
 {
@@ -93,9 +93,13 @@ netns_crs_setup()
 		ip netns exec route ip link set $iface_r up
 	done
 
-	echo "source ../../../common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec client bash
+	#echo "source ../../../common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec client bash
 	C_IFACE=$(tail -n1 /tmp/test_iface | tr -d '\r\n')
-	echo "source ../../../common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec server bash
+	#echo "source ../../../common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec server bash
+	echo "source ${abs_networking_path}/common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec client bash
+	C_IFACE=$(tail -n1 /tmp/test_iface | tr -d '\r\n')
+	echo "source ${abs_networking_path}/common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec server bash
+
 	S_IFACE=$(tail -n1 /tmp/test_iface | tr -d '\r\n')
 
 	C_IFACE_R=veth0_cr
@@ -167,10 +171,7 @@ netns_cs_setup()
 	ip link set veth0_s netns server
 	ip link set veth1_s netns server
 
-	ip link set veth0_c_br master br0
-	ip link set veth1_c_br master br0
 
-	ip link set veth0_s_br master br0
 	ip link set veth1_s_br master br0
 
 	local iface
@@ -192,9 +193,13 @@ netns_cs_setup()
 		$S_CMD ip link set $iface_s up
 	done
 
-	echo "source ../../../common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec client bash
+	#echo "source ../../../common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec client bash
 	C_IFACE=$(tail -n1 /tmp/test_iface | tr -d '\r\n')
-	echo "source ../../../common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec server bash
+	#echo "source ../../../common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec server bash
+	echo "source ${abs_networking_path}/common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec client bash
+	C_IFACE=$(tail -n1 /tmp/test_iface | tr -d '\r\n')
+	echo "source ${abs_networking_path}/common/include.sh; rm -f /tmp/test_*; PVT=yes; TOPO=$TOPO; NIC_NUM=$NIC_NUM; get_test_iface" | ip netns exec server bash
+
 	S_IFACE=$(tail -n1 /tmp/test_iface | tr -d '\r\n')
 
 	$C_CMD ip addr add $CLI_ADDR4/24 dev $C_IFACE
