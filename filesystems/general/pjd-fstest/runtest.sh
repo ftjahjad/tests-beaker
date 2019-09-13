@@ -51,7 +51,7 @@ TestsDir=""
 TmpDir=""
 
 # make sure the arguments all lower
-FSTYPES=$(echo ${FSTYPE}|tr [:upper:] [:lower:])
+FSTYPES=$(echo ${FSTYPES}|tr [:upper:] [:lower:])
 FSOPTS=$(echo ${FSOPTS}|tr [:upper:] [:lower:])
 
 RHEL_DISTRO=$(rlGetDistroRelease)
