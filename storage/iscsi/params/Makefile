@@ -55,6 +55,7 @@ $(METADATA): Makefile
 	@echo "Requires:        python3" >> $(METADATA)
 	@echo "Requires:        python2-lxml" >> $(METADATA)
 	@echo "Requires:        python3-lxml" >> $(METADATA)
+	@echo "Requires:        python-devel" >> $(METADATA)
 	@echo "RepoRequires:    cki_lib" >> $(METADATA)
 	@echo "RepoRequires:    storage/include" >> $(METADATA)
 	@echo "Priority:        Normal" >> $(METADATA)
