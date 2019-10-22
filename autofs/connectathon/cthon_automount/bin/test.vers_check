@@ -62,7 +62,7 @@ if [ "x${SERVER1}" = "x" ]; then
 	if [ "x$SERVER1" = "x" ]; then
 		echo "SERVER1 environment variable not set."
 		echo "Please set in 'tests.init'."
-		exit 1
+		exit 2
 	fi
 	if [ "x$AUTO_CLIENT_MNTPNT" = "x" ]; then
 		AUTO_CLIENT_MNTPNT=/auto_test/${SERVER1}
@@ -72,12 +72,12 @@ fi
 if [ "x$AUTO_CLIENT_MNTPNT" = "x" ]; then
 	echo "AUTO_CLIENT_MNTPNT environment variable not set."
 	echo "Please set in 'tests.init'."
-	exit 1
+	exit 2
 fi
 
 if [ ${SERVER1} = `uname -n` ]; then
 	echo "Test is useless over Loopback Transport, exiting."
-	exit 1
+	exit 2
 fi
 
 DIR="${AUTO_CLIENT_MNTPNT}/vers"

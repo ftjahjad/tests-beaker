@@ -154,10 +154,21 @@ client() {
     		rlPhaseStartTest do-$role-Test-$test
 			case "$test" in
 				"test.net" | "test.net1")
-				rlRun "./$test $Server1 $Server2"
+				rlRun "./$test $Server1 $Server2" "0,2" "Running $test with $Server1, and $Server2"
+				if [ $? -eq 2 ]; then
+					rlRun 'rhts-sync-set -s DONE${TEST}'
+					rlFileRestore
+					cki_abort_task "Failed to configure $test environment with <$Server1>, and '<$Server2>"
+				fi
 			;;
 			*)#default
-				rlRun "./$test"
+				rlRun "./$test" "0,2" "Running $test"
+				if [ $? -eq 2 ]; then
+					rlRun 'rhts-sync-set -s DONE${TEST}'
+					rlFileRestore
+					cki_abort_task "Failed to configure $test environment"
+				fi
+
 			;;
 		esac
     	rlPhaseEnd

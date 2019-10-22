@@ -2,15 +2,15 @@
 #  is made available to anyone wishing to use, modify, copy, or
 #  redistribute it subject to the terms and conditions of the GNU General
 #  Public License v.2.
-# 
+#
 #  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 #  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 #  PARTICULAR PURPOSE. See the GNU General Public License for more details.
-# 
+#
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-# 
+#
 #
 TENV=_env
 ifeq ($(PKG_TOP_DIR),)
@@ -60,11 +60,11 @@ $(METADATA): Makefile
 	@echo "Path:         $(TEST_DIR)"	>> $(METADATA)
 	@echo "TestVersion:  $(TESTVERSION)"	>> $(METADATA)
 	@echo "Description:  Connectathon for AutoFS ">> $(METADATA)
-	@echo "RunFor:       kernel $(PACKAGE_NAME)" >> $(METADATA)  
-	@echo "Requires:     $(PACKAGE_NAME)" >> $(METADATA)  
-	@echo "Requires:     autofs" >> $(METADATA)  
-	@echo "Requires:     nfs-utils" >> $(METADATA)  
-	@echo "Requires:     ypserv yp-tools" >> $(METADATA)  
+	@echo "RunFor:       kernel $(PACKAGE_NAME)" >> $(METADATA)
+	@echo "Requires:     $(PACKAGE_NAME)" >> $(METADATA)
+	@echo "Requires:     autofs" >> $(METADATA)
+	@echo "Requires:     nfs-utils" >> $(METADATA)
+	@echo "Requires:     ypserv yp-tools" >> $(METADATA)
 	@echo "Requires:     gcc  git wget bc beakerlib redhat-lsb-core sg3_utils" >> $(METADATA)
 	@echo "Requires:     utils-libs sg3_utils-devel rsyslog" >> $(METADATA)
 	@echo "Requires:     libnsl2 libtirpc-devel python2 python2-lxml python3-lxml" >> $(METADATA)
