@@ -42,9 +42,9 @@ cpuvendor=$(grep -m1 vendor_id /proc/cpuinfo | awk '{print $NF}')
 dmesgErrors=iommu-dmesg-errors.txt
 dmesgReport=iommu-dmesg-report.txt
 
-if [ -z "$OUTPUTFILE" ]; then
-        export OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
-fi
+#if [ -z "$OUTPUTFILE" ]; then
+#        export OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
+#fi
 
 function report_result {
         # Pass OUTPUTFILE to rstrnt-report-result in case the variable wasn't exported
