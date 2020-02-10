@@ -24,17 +24,20 @@
 #	added bonus is that we capture a copy of the tables, too.
 #---------------------------------------------------------------------------------
 
-# Source the common test script helpers
-. /usr/bin/rhts-environment.sh || exit 1
+## Source the common test script helpers
+#. /usr/bin/rhts-environment.sh || exit 1
 . /usr/share/beakerlib/beakerlib.sh || exit 1
 
 # Global variables
+if [ -z "$OUTPUTFILE" ]; then
+        export OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
+fi
 ret=0
 
 # make sure acpica-tools are installed
 pkg=$(rpm -qa | grep acpica-tools)
 if [ -z "$pkg" ] ; then
-    report_result $TEST WARN
+    rstrnt-report-result  $TEST WARN
     rhts-abort -t recipe
 fi 
 
@@ -60,8 +63,8 @@ fi
 echo "Test finished" | tee -a $OUTPUTFILE
 
 if [ $ret != 0 ] ; then
-    report_result $TEST FAIL $ret
+    rstrnt-report-result $TEST FAIL $ret
 else
     # all is well
-    report_result $TEST PASS 0
+    rstrnt-report-result $TEST PASS 0
 fi
