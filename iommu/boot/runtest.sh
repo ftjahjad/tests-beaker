@@ -26,8 +26,6 @@
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# remove Include rhts environment. Comment out for now while testing script
-# remove . /usr/bin/rhts-environment.sh
 #  Include beaker library
 . /usr/share/rhts-library/rhtslib.sh
 
@@ -42,14 +40,10 @@ cpuvendor=$(grep -m1 vendor_id /proc/cpuinfo | awk '{print $NF}')
 dmesgErrors=iommu-dmesg-errors.txt
 dmesgReport=iommu-dmesg-report.txt
 
-#if [ -z "$OUTPUTFILE" ]; then
-#        export OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
-#fi
-
-function report_result {
-        # Pass OUTPUTFILE to rstrnt-report-result in case the variable wasn't exported
-        OUTPUTFILE=$OUTPUTFILE rstrnt-report-result "$@"
-}
+# Create output file
+if [ -z "$OUTPUTFILE" ]; then
+        export OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
+fi
 
 function bootOptions() {
     bootOptionsFile=$1
@@ -72,14 +66,11 @@ function bootOptions() {
 	    if [ ${code} -ne 0 ]; then
 		echo "Fail: error changing boot loader." |
 		tee -a "${OUTPUTFILE}"
-		# remove report_result "${TEST}/boot_loader" "FAIL" 0
 		rstrnt-report-result  "${TEST}/boot_loader" "FAIL" 0 
 	    else
 		echo "${line}" > $CurrentBootOptions
 		echo "Reboot now!" | tee -a "${OUTPUTFILE}"
-		# remove report_result "${TEST}/boot_loader" "PASS" 0
 		rstrnt-report-result "${TEST}/boot_loader" "PASS" 0
-		#remove rhts-reboot
 		rstrnt-reboot
 	    fi
 	else
@@ -94,8 +85,6 @@ function bootOptions() {
 	    if [ ${code} -ne 0 ]; then
 		echo "Fail: error booting kernel with specified cmdline" |
 		tee -a "${OUTPUTFILE}"
-
-		#remove report_result "${TEST}/$CurrentBootOptionsReport" "FAIL" 0
 		rstrnt-report-result "${TEST}/$CurrentBootOptionsReport" "FAIL" 0
 		rm $CurrentBootOptions
 	        /sbin/grubby --remove-args="${line}" \
@@ -103,7 +92,6 @@ function bootOptions() {
         	sed -i "/$line\$/d" $bootOptionsFile
 	    else
        		echo "boot options persisted through reboot." | tee -a "${OUTPUTFILE}"
-		#report_result "${TEST}/$CurrentBootOptionsReport" "PASS" 0
 		rstrnt-report-result "${TEST}/$CurrentBootOptionsReport" "PASS" 0
 	        rm $CurrentBootOptions
                 /sbin/grubby --remove-args="${line}" \
@@ -142,10 +130,8 @@ function dmesgErrors() {
     dmesgReportCode=$?
 
     if [ ${dmesgReportCode} -ne 1 ]; then
-	#remove report_result "${TEST}/iommu-dmesg" "FAIL" 0
 	rstrnt-report-result "${TEST}/iommu-dmesg" "FAIL" 0
     else
-	#report_result "${TEST}/iommu-dmesg" "PASS" 0
 	rstrnt-report-result "${TEST}/iommu-dmesg" "PASS" 0
     fi
     
@@ -174,7 +160,6 @@ else
        	bootOptions $DefaultBootOptionsAMD
 	dmesgErrors
     else
-	#remove report_result "${TEST}/nonAMDorIntelProcessor" "SKIP" 0
 	rstrnt-report-result "${TEST}/nonAMDorIntelProcessor" "SKIP" 0
 	exit 0
     fi
