@@ -26,8 +26,10 @@
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#  Include beaker library
-. /usr/share/rhts-library/rhtslib.sh
+#  Include beaker library and cki
+#remove FDY. /usr/share/rhts-library/rhtslib.sh
+. /usr/share/beakerlib/beakerlib.sh || exit 1
+. ../../cki_lib/libcki.sh || exit 1
 
 # file to write custom boot options (from CMDLINEARGS)
 CustomBootOptions=custom-boot-options.txt
@@ -40,10 +42,6 @@ cpuvendor=$(grep -m1 vendor_id /proc/cpuinfo | awk '{print $NF}')
 dmesgErrors=iommu-dmesg-errors.txt
 dmesgReport=iommu-dmesg-report.txt
 
-# Create output file
-if [ -z "$OUTPUTFILE" ]; then
-        export OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
-fi
 
 function bootOptions() {
     bootOptionsFile=$1

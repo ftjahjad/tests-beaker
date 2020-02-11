@@ -25,13 +25,11 @@
 #---------------------------------------------------------------------------------
 
 ## Source the common test script helpers
-#. /usr/bin/rhts-environment.sh || exit 1
+#FDY remove . /usr/bin/rhts-environment.sh || exit 1
 . /usr/share/beakerlib/beakerlib.sh || exit 1
+. ../../cki_lib/libcki.sh || exit 1
 
 # Global variables
-if [ -z "$OUTPUTFILE" ]; then
-        export OUTPUTFILE=`mktemp /mnt/testarea/tmp.XXXXXX`
-fi
 ret=0
 
 # make sure acpica-tools are installed

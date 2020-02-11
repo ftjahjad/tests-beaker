@@ -43,3 +43,4 @@ $(METADATA):
 	@echo "RunFor:		kernel"	>>$(METADATA)
 	@echo "License:		GPLv2" >>$(METADATA)
 	@echo "Owner:		William Gomeringer <wgomerin@redhat.com>" >>$(METADATA)
+	@echo "RepoRequires:    cki_lib" >> $(METADATA)
