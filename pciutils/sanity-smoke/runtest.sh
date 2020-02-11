@@ -26,8 +26,8 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Include rhts environment
-. /usr/bin/rhts-environment.sh
-. /usr/lib/beakerlib/beakerlib.sh
+# remove FDY . /usr/bin/rhts-environment.sh
+. /usr/lib/beakerlib/beakerlib.sh || exit 1
 . ../../cki_lib/libcki.sh || exit 1
 
 PACKAGE="pciutils"
@@ -52,7 +52,7 @@ rlJournalStart
         rm lspci.out
     else
         echo "System does not have PCI BUS" | tee -a $OUTPUTFILE
-        rhts-report-result $TEST SKIP $OUTPUTFILE
+        rstrnt-report-result $TEST SKIP $OUTPUTFILE
         exit 0
     fi
     rlPhaseEnd

@@ -74,7 +74,8 @@ function cki_abort_recipe()
     else
         report_result ${TEST} FAIL 1
     fi
-    rhts-abort -t recipe
+    # remove FDY rhts-abort -t recipe
+    rstrnt-abort -t recipe
     exit $CKI_STATUS_ABORTED
 }
 
@@ -92,7 +93,8 @@ function cki_skip_task()
     typeset reason="$*"
     [[ -z $reason ]] && reason="unknown reason"
     cki_log "Skipping current task: $reason"
-    rhts-report-result "$TEST" SKIP "$OUTPUTFILE"
+    # remove FDY rhts-report-result "$TEST" SKIP "$OUTPUTFILE"
+    rstrnt-report-result "$TEST" SKIP "$OUTPUTFILE"
     exit $CKI_STATUS_COMPLETED
 }
 
@@ -274,7 +276,8 @@ function cki_get_yum_tool()
         echo /usr/bin/yum
     else
         echo "No tool to download kernel from a repo" >&2
-        rhts-abort -t recipe
+        # remove FDY rhts-abort -t recipe
+        rstrnt-abort -t recipe
         exit 0
     fi
 }

@@ -25,7 +25,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Include rhts environment
-. /usr/bin/rhts-environment.sh || exit 1
+# remove FDY . /usr/bin/rhts-environment.sh || exit 1
 . /usr/share/rhts-library/rhtslib.sh || exit 1
 . ../../cki_lib/libcki.sh || exit 1
 
