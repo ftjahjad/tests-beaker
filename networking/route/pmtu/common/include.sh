@@ -5,7 +5,6 @@ NETWORK_COMMONLIB_DIR=$(dirname $(readlink -f $BASH_SOURCE))
 networkLib=$NETWORK_COMMONLIB_DIR
 
 # include beaker default environmnet
-. /usr/bin/rhts_environment.sh
 . /usr/share/beakerlib/beakerlib.sh || . /usr/lib/beakerlib/beakerlib.sh
 
 # variables to control some default action
