@@ -1,0 +1,13 @@
+[General]
+name=mysql Library 
+owner=Branislav Blaskovic <bblaskov@redhat.com>
+description=Library for creating mysql configuration and test data 
+license=GPLv2
+confidential=no
+destructive=no
+
+[restraint]
+entry_point=make run
+dependencies=mysql;sed
+repoRequires=cki_lib
+

@@ -1,0 +1,13 @@
+[General]
+name=mariadb Library 
+owner=Branislav Blaskovic <bblaskov@redhat.com>
+description=Set of basic functions for mariadb
+license=GPLv2
+confidential=no
+destructive=no
+
+[restraint]
+entry_point=make run
+dependencies=mariadb
+repoRequires=cki_lib
+
