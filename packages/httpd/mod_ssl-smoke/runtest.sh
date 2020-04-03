@@ -57,7 +57,7 @@ rlJournalStart
         fi
         rlAssertRpm --all
         rlRun "TmpDir=\$(mktemp -d)" 0 "Creating tmp directory"
-        #rlRun "rlImport httpd/http"
+        rlRun "rlImport httpd/http"
         rlFileBackup --namespace mod_ssl_smoke $httpSSL_CRT
         rlFileBackup --namespace mod_ssl_smoke $httpSSL_KEY
         rlFileBackup --namespace mod_ssl_smoke $httpLOGDIR/error_log
