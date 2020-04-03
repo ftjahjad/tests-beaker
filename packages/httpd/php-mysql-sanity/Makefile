@@ -43,7 +43,7 @@ clean:
 	rm -f *~ $(BUILT_FILES)
 
 
--# Common Variables
+# Common Variables
 TEST_DIR=/mnt/tests$(TEST)
 INSTALL_DIR=$(DEST)$(TEST_DIR)
 METADATA=testinfo.desc
