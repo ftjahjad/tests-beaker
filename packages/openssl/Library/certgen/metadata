@@ -1,7 +1,7 @@
 [General]
-name=Certgen Library 
+name=Certgen Library
 owner=Hubert Kario <hkario@redhat.com>
-description=Library for creating X.509 certificates 
+description=Library for creating X.509 certificates
 license=GPLv2
 confidential=no
 destructive=no

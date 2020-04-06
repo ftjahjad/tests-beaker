@@ -1,0 +1,13 @@
+[General]
+name=httpd php-mysql-sanity test 
+owner=Karel Srot <ksrot@redhat.com>
+description=test fetching data from mysqldb/mariadb through php
+license=GPLv2
+confidential=no
+destructive=no
+
+[restraint]
+entry_point=./runtest.sh
+dependencies=httpd;php;php-zts;php-mysqlnd;mariadb-server
+repoRequires=packages/httpd/Library/http;packages/mysql/Library/basic;packages/mariadb55/Library/basic;packages/php/Library/utils;cki_lib
+

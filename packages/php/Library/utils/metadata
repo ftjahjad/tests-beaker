@@ -1,5 +1,5 @@
 [General]
-name=php test Library 
+name=php test Library
 owner=David Kutalek <dkutalek@redhat.com>
 description=Library with various utility functions for php tests
 license=GPLv2
