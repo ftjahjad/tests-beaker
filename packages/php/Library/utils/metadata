@@ -9,5 +9,5 @@ destructive=no
 [restraint]
 entry_point=echo nothing > /dev/null
 dependencies=lsof
-repoRequires=packages/httpd/Library/http;distribution/Library/RpmSnapshot;cki_lib
+repoRequires=packages/httpd/Library/http;package/php/Library/RpmSnapshot;cki_lib
 

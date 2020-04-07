@@ -41,7 +41,7 @@ This library provide snapshoting functionality for rpm installed on the system.
 To use this functionality you need to import library distribution/RpmSnapshot and
 add following line to Makefile.
 
-	@echo "RhtsRequires:    library(distribution/RpmSnapshot)" >> $(METADATA)
+	@echo "repoRequires:    packages/php/Library/RpmSnapshot" >> $(METADATA)
 
 And in the code to include rlImport distribution/RpmSnapshot or just
 I<rlImport --all> to import all libraries specified in Makelife.
@@ -49,7 +49,7 @@ I<rlImport --all> to import all libraries specified in Makelife.
 B<Code example>
 
 	RpmSnapshotCreate  [RPM_SNAPSHOT]
-	yum update -y
+	yum/dnf update -y
 	RpmSnapshotRevert  [RPM_SNAPSHOT]
 	RpmSnapshotDiscard [RPM_SNAPSHOT]
 
@@ -64,6 +64,21 @@ snapshoting a reverting.
 
 echo -n "loading library RpmSnapshot v$__INTERNAL_RpmSnapshot_LIB_VERSION... "
 
+# select tool to manage package, which could be "yum" or "dnf" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {{{
+get_yum_tool()
+{
+    if [ -x /usr/bin/dnf ]; then
+        echo "/usr/bin/dnf"
+    elif [ -x /usr/bin/yum ]; then
+        echo "/usr/bin/yum"
+    else
+        echo "No tool to download from a repo" >&2
+        rstrnt-abort -t recipe
+        exit 0
+    fi
+}
+
+YUM=$(get_yum_tool)
 
 # __INTERNAL_RpmSnapshot_get_rpm_list ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {{{
 __INTERNAL_RpmSnapshot_get_rpm_list() {
@@ -160,9 +175,9 @@ RpmSnapshotRevert() {
         rpm -ivh --nodeps `cat $install`
       }
       [[ -s $install.yum ]] &&{
-        rlLog "yum install -y ..."
+        rlLog "$YUM install -y ..."
         echo "Packages to be installed using yum: `cat $install.yum`"
-        yum install -y `cat $install.yum`
+        $YUM install -y `cat $install.yum`
       }
       [[ -s $upgrade ]] &&{
         rlLog "rpm -Uvh --nodeps ..."
@@ -171,10 +186,10 @@ RpmSnapshotRevert() {
       }
       [[ -s $upgrade.yum ]] &&{
         echo "Packages to be up/down-graded `cat $upgrade.yum`"
-        rlLog "yum install -y ..."
-        yum install -y `cat $upgrade.yum`
-        rlLog "yum downgrade -y ..."
-        yum downgrade -y `cat $upgrade.yum`
+        rlLog "$YUM install -y ..."
+        $YUM install -y `cat $upgrade.yum`
+        rlLog "$YUM downgrade -y ..."
+        $YUM downgrade -y `cat $upgrade.yum`
       }
       rlLog "Check state after restore"
       __INTERNAL_RpmSnapshot_get_rpm_list > $tmp
