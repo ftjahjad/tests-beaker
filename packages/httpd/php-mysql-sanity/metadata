@@ -7,7 +7,7 @@ confidential=no
 destructive=no
 
 [restraint]
-entry_point=./runtest.sh
+entry_point=chmod a+x runtest.sh;./runtest.sh
 dependencies=httpd;php;php-zts;php-mysqlnd;mariadb-server
 repoRequires=packages/httpd/Library/http;packages/mysql/Library/basic;packages/mariadb55/Library/basic;packages/php/Library/utils;cki_lib
 
