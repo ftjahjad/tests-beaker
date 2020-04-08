@@ -1,0 +1,13 @@
+[General]
+name=rpm snapshoting library
+owner=Dalibor Pospisil <dapospis@redhat.com>
+description=The library provide snapshoting functionality for rpm installed on the system
+license=GPLv2
+confidential=no
+destructive=no
+
+[restraint]
+entry_point=echo nothing > /dev/null
+dependencies=rpm
+repoRequires=cki_lib
+

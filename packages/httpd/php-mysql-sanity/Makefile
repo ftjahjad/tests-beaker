@@ -43,7 +43,7 @@ clean:
 	rm -f *~ $(BUILT_FILES)
 
 
--# Common Variables
+# Common Variables
 TEST_DIR=/mnt/tests$(TEST)
 INSTALL_DIR=$(DEST)$(TEST_DIR)
 METADATA=testinfo.desc
@@ -57,10 +57,10 @@ $(METADATA): Makefile
 	@echo "Type:            Sanity" >> $(METADATA)
 	@echo "RunFor:          httpd" >> $(METADATA)
 	@echo "Requires:        httpd php php-zts php-mysqlnd mariadb-server" >> $(METADATA)
-	@echo "RhtsRequires:    library(httpd/http)" >> $(METADATA)
-	@echo "RhtsRequires:    library(mysql/basic)" >> $(METADATA)
-	@echo "RhtsRequires:    library(mariadb55/basic)" >> $(METADATA)
-	@echo "RhtsRequires:    library(php/utils)" >> $(METADATA)
+	@echo "repoRequires:    packages/httpd/Library/http" >> $(METADATA)
+	@echo "repoRequires:    packages/mysql/Library/basic" >> $(METADATA)
+	@echo "repoRequires:    packages/mariadb55/Library/basic" >> $(METADATA)
+	@echo "repoRequires:    packages/php/Library/utils" >> $(METADATA)
 	@echo "repoRequires:    cki_lib" >> $(METADATA)
 	@echo "Priority:        Normal" >> $(METADATA)
 	@echo "License:         GPLv2" >> $(METADATA)
