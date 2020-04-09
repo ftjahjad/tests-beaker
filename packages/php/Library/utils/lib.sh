@@ -146,6 +146,20 @@ Runs rlAssertEquals as last command and returns its return value.
 
 =cut
 
+get_yum_tool()
+{
+    if [ -x /usr/bin/dnf ]; then
+        echo "/usr/bin/dnf"
+    elif [ -x /usr/bin/yum ]; then
+        echo "/usr/bin/yum"
+    else
+        echo "No tool to download from a repo" >&2
+        rstrnt-abort -t recipe
+        exit 0
+    fi
+}
+YUM=$(get_yum_tool)
+
 phpAssertFileOrigin() {
     date
 
@@ -471,7 +485,7 @@ phpPdoPhpMysqlSetup () {
             rlRun "rlImport php/RpmSnapshot" 0 "php/utils: importing needed RpmSnapshot library"
             if ! rpm -q php-mysql; then
                 rlRun "RpmSnapshotCreate"
-                rlRun "yum install -y php-mysql"
+                rlRun "$YUM install -y php-mysql"
             fi
         fi
         rlRun "php -r 'phpinfo();' 2>&1 | grep \"^pdo_mysql\"" 0 "Check presence of php-mysql(nd)"
