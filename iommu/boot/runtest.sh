@@ -47,7 +47,7 @@ function bootOptions() {
 
     while read -r line; do
         # Check to see if new options have been set yet
-	if [[ -z "${REBOOTCOUNT}" ||  "${REBOOTCOUNT}" -eq 0 ]] || \
+	if [[ -z "${RSTRNT_REBOOTCOUNT}" ||  "${RSTRNT_REBOOTCOUNT}" -eq 0 ]] || \
 	    [[ ! -a $CurrentBootOptions ]]; then
 	    echo "Start test." | tee -a "${OUTPUTFILE}"
 	    echo "Old cmdline: $(cat /proc/cmdline)" | tee -a "${OUTPUTFILE}"
