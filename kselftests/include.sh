@@ -1,4 +1,7 @@
 #!/bin/bash
+
+TEST="kselftest"
+
 [ ! "$JOBID" ] && rm -rf logs && mkdir logs && export LOG_DIR="$PWD/logs"
 
 if [ ! "$JOBID" ]; then
