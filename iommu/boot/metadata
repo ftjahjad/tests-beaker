@@ -1,0 +1,11 @@
+[General]
+name=iommu/boot
+owner=William Gomeringer <wgomerin@redhat.com>
+description=iommu boot test
+license=GPLv2
+confidential=no
+destructive=no
+
+[restraint]
+entry_point=bash ./runtest.sh
+repoRequires=cki_lib

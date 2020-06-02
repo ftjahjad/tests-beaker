@@ -29,6 +29,7 @@
 # Include libraries
 . ../../cki_lib/libcki.sh || exit 1
 
+TEST="iommu/boot/"
 # file to write custom boot options (from CMDLINEARGS)
 CustomBootOptions=custom-boot-options.txt
 # file to use if no custom boot options passed
